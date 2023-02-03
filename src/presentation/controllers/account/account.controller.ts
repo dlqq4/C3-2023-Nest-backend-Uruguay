@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put, Get, Delete,Patch } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put, Get, Delete, Patch, Query, ParseUUIDPipe, ParseFloatPipe } from '@nestjs/common';
 import { AccountDTO } from 'src/business-logic/dtos/account-dto';
 import { CreateAccountDto } from 'src/business-logic/dtos/create-account-dto';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
@@ -15,28 +15,37 @@ export class AccountController {
         private readonly customerService : CustomerService){}
     
     
-    @Post('/create') //A quien le creo esta cuenta
+    //FUNCA
+    @Post('/create')
     createAccount(@Body() account: AccountDTO): AccountEntity {
-
-        const newAditionalAccount = new AccountEntity();
-        const newAditionalAccountType = new AccountTypeEntity();
-
-        newAditionalAccountType.name = account.accountTypeName;
-
-        newAditionalAccount.accountTypeId = newAditionalAccountType;
-        newAditionalAccount.balance = account.balance;
-        newAditionalAccount.customerId = this.customerService.getCustomerInfo(account.customerId); //??
-
-        const aditionalAccount = this.accountService.createAccount(newAditionalAccount);
-
-        return aditionalAccount;
+        return this.accountService.createAccount(account);
     }
     
 
-    @Put('/update/:accountId')
-    updateAccount(@Param() accountId: string, @Body() newAccount: AccountDTO): AccountEntity {
-        return this.accountService.updateAccount(accountId, newAccount);
+    //MUESTRO LAS CUENTAS DE UN USUARIO
+    @Get('/get-account-by-customer-id')
+    getAccountByCostumerId(@Query('customer') customer: string): AccountEntity[] {
+        return this.accountService.getAccountByCustomerId(customer);
     }
+
+    //MUESTRO EL BALANCE DE UNA CUENTA SEGUN ID DE LA CUENTA
+    @Get('/get-balance')
+    getBalance(@Query('account') account: string): string {
+        return this.accountService.getBalance(account).toString();
+    }
+
+    //DEPOSITAR DINERO EN UNA CUENTA SEGUN ID DE LA CUENTA
+    @Post('addBalance/:id/:amount')
+    addBalance(@Param('id', ParseUUIDPipe) accountId: string,@Param('amount', ParseFloatPipe) amount: number): void {
+        return this.accountService.addBalance(accountId, amount);
+    }
+
+    //REMUEVE SALDO DE UNA CUENTA
+    @Post('removebalance/:id/:amount')
+    removeBalance(@Param('id') accountId: string, @Param('amount', ParseFloatPipe) amount: number): void {
+        return this.accountService.removeBalance(accountId, amount);
+    }
+
 
     @Delete('/soft-delete/:accountId')
     softDeleteAccount(@Param() accountId: string): void {
@@ -46,32 +55,6 @@ export class AccountController {
     @Delete('/hard-delete/:accountId')
     hardDeleteAccount(@Param() accountId: string): void {
         this.accountService.deleteAccount(accountId);
-    }
-
-    @Get('/find-by-customer/:customerId')
-    findByCustomer(@Body() pagination: PaginationModel, @Param() customerId: string): AccountEntity[] {
-        return this.findByCustomer(pagination, customerId);
-    }
-
-    @Get('/balance/:accountId')
-    getBalance(@Param() accountId: string): number {
-        return this.accountService.getBalance(accountId);
-    }
-
-    @Get('/account-type/:accountId')
-    getAccountType(@Param() accountId: string): AccountTypeEntity {
-        return this.accountService.getAccountType(accountId);
-    }
-
-
-    @Get('/state/:accountId')
-    getState(@Param() accountId: string): boolean {
-        return this.accountService.getState(accountId);
-    }
-
-    @Post('/add-balance/:accountId')
-    addBalance(@Param() accountId: string, @Body() amount: number) {
-        this.accountService.addBalance(accountId, amount);
     }
 
     @Patch('/change-account-type/:accountId')
@@ -89,10 +72,33 @@ export class AccountController {
         return this.accountService.removeBalance(accountId, 0);
     }
 
-    @Post('/remove-balance/:accountId')
-    removeBalance(@Param() accountId: string, @Body() amount: number): void {
-        return this.accountService.removeBalance(accountId, amount);
+    
+
+    /*
+    METODOS POR IMPLEMENTAR
+    ***********************
+
+    @Put('/update/:accountId')
+    updateAccount(@Param() accountId: string, @Body() newAccount: AccountDTO): AccountEntity {
+        return this.accountService.updateAccount(accountId, newAccount);
     }
+
+
+    @Get('/account-type/:accountId')
+    getAccountType(@Param() accountId: string): AccountTypeEntity {
+        return this.accountService.getAccountType(accountId);
+    }
+
+
+    @Get('/state/:accountId')
+    getState(@Param() accountId: string): boolean {
+        return this.accountService.getState(accountId);
+    }
+    
+    
+    
+    */ 
+
 
 }    
 

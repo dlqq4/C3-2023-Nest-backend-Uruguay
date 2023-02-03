@@ -11,56 +11,21 @@ import { UpdateCustomerDTO } from 'src/business-logic/dtos/update-customer-dto';
 export class CustomerService {
 
 
-    constructor(private readonly customerRepository: CustomerRepo,
-                private readonly accountService: AccountService) {}
+    constructor(private readonly customerRepository: CustomerRepo){}
 
-               // 
-    /*    
-    createCustomer(customer: CreateCustomerDto) {
-
-        const documentTypeEntity = new DocumentTypeEntity;
-        documentTypeEntity.id = customer.documentType;
-
-        const newCustomerEntity = new CustomerEntity();
-        
-        newCustomerEntity.documentType = documentTypeEntity;
-        newCustomerEntity.email = customer.email;
-        newCustomerEntity.fullName = customer.fullName;
-        newCustomerEntity.password = customer.password;
-        newCustomerEntity.phone = customer.phone;
-
-        return this.customerRepository.register(newCustomerEntity);
-    }
-    /*
-
-    /**
-     * Obtener información de un cliente
-     *
-     * @param {string} customerId
-     * @return {*}  {CustomerEntity}
-     * @memberof CustomerService
-     */
+     
     getCustomerInfo(customerId: string): CustomerEntity {
 
         const currentEntity = this.customerRepository.findOneById(customerId);
-
-        return currentEntity
-        
+        return currentEntity   
+            
     }
 
     findAll(pagination: PaginationModel): CustomerEntity[] { //No esta pronto
         return this.customerRepository.findAll();
     }
 
-    /**
-     * Actualizar información de un cliente
-     *
-     * @param {string} id
-     * @param {CustomerModel} customer
-     * @return {*}  {CustomerEntity}
-     * @memberof CustomerService
-     */
-
+   
     updatedCustomer(id: string, newCustomer: UpdateCustomerDTO): CustomerEntity {
 
         const currentEntity = this.customerRepository.findOneById(id); // Creo una constante y la igualo segun Id
@@ -86,32 +51,14 @@ export class CustomerService {
         this.customerRepository.update(customerId, customer);
     }
 
-    /**
-     * Dar de baja a un cliente en el sistema
-     *
-     * @param {string} id
-     * @return {*}  {boolean}
-     * @memberof CustomerService
-     */
+   
     
-    
-    unsubscribe(pagination: PaginationModel, id: string): boolean {
-        const accounts = this.accountService.findByCustomer(pagination, id);
-
-        const index = accounts.findIndex((account) => account.balance != 0);
-
-        if (index != -1) throw new Error('Cannot Delete this Customer. Your accounts need a balance of 0')
-
-        return true;
-    }
-    
-    deleteCustomer(customerId: string, soft?: boolean): void {
+    unsuscribe(customerId: string, soft?: boolean): void {
         
         if (soft) this.customerRepository.delete(customerId, soft);
 
         this.customerRepository.delete
     }
-
 
 
     private getCustomer(customerId: string): CustomerEntity {

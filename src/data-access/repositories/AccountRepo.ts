@@ -61,13 +61,13 @@ export class AccountRepository extends BaseRepository<AccountEntity>  implements
     }
   
 
-    findOneById(id: string): IAccountModel {
+    findOneById(id: string): AccountEntity { 
 
-      const currentEntity = this.database.find((obj) => obj.id === id && typeof obj.daletedAt === 'undefined');
+      const currentEntity = this.database.findIndex((obj) => obj.id === id && typeof obj.daletedAt === 'undefined');
 
-      if(!currentEntity ) throw new NotFoundException('Lo siento, nada por aquí =(');
+      if(currentEntity  == -1) throw new NotFoundException('Lo siento, nada por aquí =(');
 
-      return currentEntity;
+      return this.database[currentEntity];
     }
 
 

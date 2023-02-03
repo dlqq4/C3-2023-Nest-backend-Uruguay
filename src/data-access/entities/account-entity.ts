@@ -10,10 +10,9 @@ export class AccountEntity implements IAccountModel {
     id = uuid();
     customerId : CustomerEntity;
     accountTypeId : AccountTypeEntity ;
-    balance: number;
+    balance = 0;
     state = true;
     daletedAt?: Date | number ;
-    
-    // Get and Set
+
 
 }

@@ -11,6 +11,7 @@ import { SignUpDto } from 'src/business-logic/dtos/sign-up-dto';
 import { DocumentTypeEntity } from 'src/data-access/entities/document-type-entity';
 import { DocumentTypeRepository } from 'src/data-access/repositories/DocumentTypeRepo';
 import { JwtService } from '@nestjs/jwt/dist';
+import { AccountDTO } from 'src/business-logic/dtos/account-dto';
 
 @Injectable()
 export class SecurityService {
@@ -46,17 +47,13 @@ export class SecurityService {
       this.documentTypeRepository.register(documentType);       //AGREGO EL NUEVO DOCUMENT TYPE A EL ARRAY DE DOCUMENT TYPE
   
       if (customer) {
-        
-        const accountType = new AccountTypeEntity();
-        const newAccount = new AccountEntity();
-        
-        accountType.name = userDto.accountTypeName;  //LE ASIGNO EL NOMBRE AL TIPO DE CUENTA, POSIBLES CAJA AHORRO, CUENTA CORRIENTE
-        
-        newAccount.accountTypeId = accountType;
-        newAccount.customerId = customer; 
-        newAccount.balance = userDto.balance || 0;
-        
-        const account = this.accountService.createAccount(newAccount); //AGREGO LA NUEVA CUENTA A EL ARRAY DE ACCOUNT
+          
+        const newAccountDTO = new AccountDTO();
+
+        newAccountDTO.accountTypeName = userDto.accountTypeName;
+        newAccountDTO.customerId = customer.id;
+
+        const account = this.accountService.createAccount(newAccountDTO); //AGREGO LA NUEVA CUENTA A EL ARRAY DE ACCOUNT
         
         console.log(account.balance)
 

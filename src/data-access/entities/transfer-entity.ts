@@ -9,7 +9,7 @@ export class TransferEntity implements ITransferModel {
      income: AccountEntity; //Cuenta entrante
      amount: number;
      reason: string;
-     dateTime: number | Date;
+     dateTime = new Date();
      deletedAt?: number | Date | undefined;
     
     

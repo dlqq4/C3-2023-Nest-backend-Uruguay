@@ -17,11 +17,11 @@ export class CustomerController {
 
     @Delete('/softdelete/:id')
     unsuscribe(id: string): void {
-        this.customerService.deleteCustomer(id);
+        this.customerService.unsuscribe(id);
     }
     @Delete('/harddelete/:id')
     hardDelete(id: string): void {
-        this.customerService.deleteCustomer(id);
+        this.customerService.unsuscribe(id);
     }
 
     @Get('/find/:id')

@@ -30,7 +30,6 @@ export class TransferService {
     newTransfer.income = newIncome;
     newTransfer.amount = transfer.amount;
     newTransfer.reason = transfer.reason;
-    newTransfer.dateTime = Date.now();
 
     return this.transferRepository.register(newTransfer);
 

@@ -15,41 +15,30 @@ import { CustomerRepo } from 'src/data-access/repositories/CustomerRepo';
 export class AccountService {
 
     constructor(private readonly accountRepository: AccountRepository,
-                private readonly accountTypeRepository: AccountTypeRepository
-                ) {}
+                private readonly accountTypeRepository: AccountTypeRepository,
+                private readonly customerService : CustomerService) {}
 
-   
-    //createAditionalAccount by DTO
-     /*
-    createAditionalAccount(account: AccountDTO): AccountEntity {
-
+    createAccount(account: AccountDTO): AccountEntity { 
+        
         const newAditionalAccount = new AccountEntity();
         const newAditionalAccountType = new AccountTypeEntity();
 
         newAditionalAccountType.name = account.accountTypeName;
 
         newAditionalAccount.accountTypeId = newAditionalAccountType;
-        newAditionalAccount.balance = account.balance;
-        newAditionalAccount.customerId = this.customerService.getCustomerInfo(account.customerId); //??
+        newAditionalAccount.customerId = this.customerService.getCustomerInfo(account.customerId);
 
-        const aditionalAccount = this.createAccount(newAditionalAccount);
-         
-         return newAditionalAccount
-        }
-    */
-
-    createAccount(account: AccountEntity): AccountEntity {  //Le paso DTO para crear un entity
- 
-        return this.accountRepository.register(account);
+        return this.accountRepository.register(newAditionalAccount);
     }
 
-    /**
-     * Obtener el balance de una cuenta
-     *
-     * @param {string} accountId
-     * @return {*}  {number}
-     * @memberof AccountService
-     */
+    //MUESTRO TODAS LAS CUENTAS DE UN USUARIO
+    getAccountByCustomerId(customerId: string): AccountEntity[] {
+
+        return this.accountRepository.findByCustomer(customerId);
+    }
+    
+
+    //MUESTRO EL BALANCE DE UNA CUENTA SEGUN ID DE LA CUENTA
     getBalance(accountId: string): number {
         
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -57,31 +46,17 @@ export class AccountService {
         return currentEntity.balance
     }
 
-    /**
-     * Agregar balance a una cuenta
-     *
-     * @param {string} accountId
-     * @param {number} amount
-     * @memberof AccountService
-     */
+    //DEPOSITAR DINERO EN UNA CUENTA SEGUN ID DE LA CUENTA
     addBalance(accountId: string, amount: number): void {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
-
+        
         currentEntity.balance = currentEntity.balance + amount;
 
         this.accountRepository.update(accountId, currentEntity)
 
     }
 
-
-    /**
-     * Remover balance de una cuenta
-     *
-     * @param {string} accountId
-     * @param {number} amount
-     * @memberof AccountService
-     */
     removeBalance(accountId: string, amount: number): void {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -96,23 +71,14 @@ export class AccountService {
 
             this.accountRepository.update(accountId, currentEntity)
         }
-        //hacer validacion
-
-
     }
+
 
     private cleanBalance(accountId: string): number {
         return this.getAccount(accountId).balance = 0;
     }
 
-    /**
-     * Verificar la disponibilidad de un monto a retirar en una cuenta
-     *
-     * @param {string} accountId
-     * @param {number} amount
-     * @return {*}  {boolean}
-     * @memberof AccountService
-     */
+  
     verifyAmountIntoBalance(accountId: string, amount: number): boolean {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -124,13 +90,7 @@ export class AccountService {
         } else return true;
     }
 
-    /**
-     * Obtener el estado de una cuenta
-     *
-     * @param {string} accountId
-     * @return {*}  {boolean}
-     * @memberof AccountService
-     */
+    
     getState(accountId: string): boolean {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -138,13 +98,7 @@ export class AccountService {
         return currentEntity.state;
     }
 
-    /**
-     * Cambiar el estado de una cuenta
-     *
-     * @param {string} accountId
-     * @param {boolean} state
-     * @memberof AccountService
-     */
+
     changeState(accountId: string, state: boolean): void {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -154,13 +108,7 @@ export class AccountService {
         this.accountRepository.update(accountId, currentEntity)
     }
 
-    /**
-     * Obtener el tipo de cuenta de una cuenta
-     *
-     * @param {string} accountId
-     * @return {*}  {AccountTypeEntity}
-     * @memberof AccountService
-     */
+   
     getAccountType(accountId: string): AccountTypeEntity {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -169,14 +117,7 @@ export class AccountService {
 
     }
 
-    /**
-     * Cambiar el tipo de cuenta a una cuenta
-     *
-     * @param {string} accountId
-     * @param {string} accountTypeId
-     * @return {*}  {AccountTypeEntity}
-     * @memberof AccountService
-      */
+   
     changeAccountType(accountId: string, accountTypeId: string): AccountTypeEntity {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
@@ -187,12 +128,7 @@ export class AccountService {
     }
    
 
-    /**
-     * Borrar una cuenta
-     *
-     * @param {string} accountId
-     * @memberof AccountService
-     */
+  
     deleteAccount(accountId: string, soft?: boolean): void {
         if (soft) this.accountRepository.delete(accountId, soft);
 
@@ -212,25 +148,12 @@ export class AccountService {
         return currentEntity
       }
 
-      //Entreverada la mano??
+      //SOLUCIUONAR?
       updateAccount(accountId: string, newAccountData: AccountDTO) : AccountEntity{
 
         const currentEntity = this.accountRepository.findOneById(accountId);
 
-        const accountTypeEntity = new AccountTypeEntity();
-        accountTypeEntity.id = newAccountData.accountType;
-
-        const newAccountEntity = new AccountEntity();
-        newAccountEntity.accountTypeId = accountTypeEntity;
-
-        const newCustomerEntity = new CustomerEntity();
-        newCustomerEntity.id = newAccountData.customerId;
-        
-
-        currentEntity.balance = newAccountData.balance;
-        currentEntity.state = newAccountData.state;
-
-        return this.accountRepository.update(accountId, newAccountEntity);
+        return this.accountRepository.update(accountId, currentEntity);
     
       }
 
