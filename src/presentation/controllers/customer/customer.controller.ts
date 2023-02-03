@@ -1,5 +1,4 @@
 import { Body, Controller, Param, Post, Put, Delete, Get, Patch } from '@nestjs/common';
-import { CreateCustomerDto } from 'src/business-logic/dtos/create-customer-dto';
 import { UpdateCustomerDTO } from 'src/business-logic/dtos/update-customer-dto';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
 import { CustomerEntity } from 'src/data-access/entities/customer-entity';
@@ -16,9 +15,9 @@ export class CustomerController {
         return this.customerService.getCustomerInfo(id);
     }
 
-
+    //MODIFICAR UN USUARIO
     @Put('/update/:id')
-    updateCustomer(@Param() id: string ,@Body() newCustomer: UpdateCustomerDTO ): CustomerEntity {
+    updateCustomer(@Param('id') id: string ,@Body() newCustomer: UpdateCustomerDTO ): CustomerEntity {
         return this.customerService.updatedCustomer(id, newCustomer);
     }
 

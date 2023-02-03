@@ -28,6 +28,7 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements Cust
     else throw new NotFoundException('Lo siento, nada por aqui =(');
 
     return this.database[indexCurrentEntity];
+    
   }
 
 

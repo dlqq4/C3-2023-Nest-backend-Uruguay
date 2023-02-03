@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CustomerRepo } from 'src/data-access/repositories/CustomerRepo';
 import { AccountService } from '../account/account.service';
 import { CustomerEntity } from 'src/data-access/entities/customer-entity';
 import { PaginationModel } from 'src/data-access/models/i-pagination-model';
-import { CreateCustomerDto } from 'src/business-logic/dtos/create-customer-dto';
 import { DocumentTypeEntity } from 'src/data-access/entities/document-type-entity';
 import { UpdateCustomerDTO } from 'src/business-logic/dtos/update-customer-dto';
 
@@ -28,19 +27,19 @@ export class CustomerService {
    
     updatedCustomer(id: string, newCustomer: UpdateCustomerDTO): CustomerEntity {
 
-        const currentEntity = this.customerRepository.findOneById(id); // Creo una constante y la igualo segun Id
+        const currentEntity = this.customerRepository.findOneById(id);
+        
+        if(currentEntity){
+          
+            currentEntity.document = newCustomer.document  
+            currentEntity.fullName = newCustomer.fullName;
+            currentEntity.email = newCustomer.email;
+            currentEntity.phone = newCustomer.phone;
+            currentEntity.password = newCustomer.password;
+            currentEntity.state = newCustomer.state;
 
-        const documentType = new DocumentTypeEntity(); //Creo una constante de tipo Document type Entity
-        documentType.id = newCustomer.documentType; //Al ID de mi cosntante DTE le asigno el tipo de documento de mi dto
-
-        currentEntity.documentType = documentType;
-        currentEntity.document = newCustomer.document  //igualo atributos
-        currentEntity.fullName = newCustomer.fullName;
-        currentEntity.email = newCustomer.email;
-        currentEntity.phone = newCustomer.phone;
-        currentEntity.password = newCustomer.password;
-
-        return this.customerRepository.update(id, currentEntity);
+            return this.customerRepository.update(id, currentEntity);
+        }     else throw new NotFoundException('Nada por aca!')
     }
 
 

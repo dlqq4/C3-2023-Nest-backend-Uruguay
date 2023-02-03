@@ -2,8 +2,10 @@ import { IsEmail, IsNumberString, IsUUID, IsString, IsBoolean } from 'class-vali
 
 export class UpdateCustomerDTO {
 
+    /*
     @IsUUID(4, { message: "this must to be uuid" })
     documentType: string;
+    */
 
     @IsNumberString()
     document: string;
@@ -20,7 +22,8 @@ export class UpdateCustomerDTO {
     @IsNumberString()
     phone: string;
 
+    
     @IsBoolean()
     state: boolean;
-
+    
 }
