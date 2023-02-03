@@ -36,13 +36,13 @@ export class AccountController {
 
     //DEPOSITAR DINERO EN UNA CUENTA SEGUN ID DE LA CUENTA
     @Post('addBalance/:id/:amount')
-    addBalance(@Param('id', ParseUUIDPipe) accountId: string,@Param('amount', ParseFloatPipe) amount: number): void {
+    addBalance(@Param('id', ParseUUIDPipe) accountId: string,@Param('amount', ParseFloatPipe) amount: number): AccountEntity {
         return this.accountService.addBalance(accountId, amount);
     }
 
     //REMUEVE SALDO DE UNA CUENTA
     @Post('removebalance/:id/:amount')
-    removeBalance(@Param('id') accountId: string, @Param('amount', ParseFloatPipe) amount: number): void {
+    removeBalance(@Param('id') accountId: string, @Param('amount', ParseFloatPipe) amount: number): AccountEntity {
         return this.accountService.removeBalance(accountId, amount);
     }
 
@@ -68,7 +68,7 @@ export class AccountController {
     }
 
     @Post('/remove-all-balance/:accountId')
-    removeAllBalance(@Param() accountId: string): void {
+    removeAllBalance(@Param() accountId: string): AccountEntity {
         return this.accountService.removeBalance(accountId, 0);
     }
 
@@ -93,12 +93,10 @@ export class AccountController {
     @Get('/state/:accountId')
     getState(@Param() accountId: string): boolean {
         return this.accountService.getState(accountId);
-    }
-    
-    
-    
+    }  
     */ 
 
+    
 
 }    
 

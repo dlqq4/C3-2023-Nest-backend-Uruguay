@@ -64,9 +64,9 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements Cust
 
   findOneById(id: string): CustomerEntity {
 
-    const currentEntity = this.database.find((obj) => obj.id === id && typeof obj.daletedAt === 'undefined');
+    const currentEntity = this.database.findIndex((obj) => obj.id === id && typeof obj.daletedAt === 'undefined');
 
-    if (currentEntity) return currentEntity;
+    if (currentEntity) return this.database[currentEntity];
 
     else throw new NotFoundException('Lo siento, nada por aqui =(');
   }

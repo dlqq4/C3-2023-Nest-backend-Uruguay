@@ -9,6 +9,13 @@ import { CustomerService } from 'src/business-logic/services/customer/customer.s
 export class CustomerController {
 
     constructor(private readonly customerService : CustomerService ){}
+    
+    //INFORMACION DEL CUSTOMER SEGUN ID
+    @Get('/find/:id')
+    getCustomerInfo(@Param('id') id: string) {
+        return this.customerService.getCustomerInfo(id);
+    }
+
 
     @Put('/update/:id')
     updateCustomer(@Param() id: string ,@Body() newCustomer: UpdateCustomerDTO ): CustomerEntity {
@@ -24,10 +31,6 @@ export class CustomerController {
         this.customerService.unsuscribe(id);
     }
 
-    @Get('/find/:id')
-    getCustomerInfo(@Param() id: string) {
-        return this.customerService.getCustomerInfo(id);
-    }
 
     @Get('/find-all')
     findAll(pagination: PaginationModel): CustomerEntity[] {

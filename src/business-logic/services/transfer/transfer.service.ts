@@ -12,22 +12,15 @@ import { DataRangeDto } from 'src/business-logic/dtos/data-range-dto';
 @Injectable()
 export class TransferService {
   constructor(private readonly transferRepository: TransferRepository,
-              private readonly accountRepository : AccountService) { }
+              private readonly accountService : AccountService) { }
 
 
     //CREA UNA TRANSFERENCIA ENTRE CUENTAS DEL BANCO
-
   createTransfer(transfer : CreateTransferDTO) : TransferEntity {
     
-    const newOutcome = this.accountRepository.findOneById(transfer.outcome); //Lo que paso aca es un ID de DTO
-    newOutcome.id = transfer.outcome;
-
-    const newIncome = this.accountRepository.findOneById(transfer.income); //Lo que paso aca es un ID de DTO
-    newIncome.id = transfer.income;
-
     const newTransfer = new TransferEntity();
-    newTransfer.outcome = newOutcome;
-    newTransfer.income = newIncome;
+    newTransfer.outcome = this.accountService.removeBalance(transfer.outcome, transfer.amount);
+    newTransfer.income = this.accountService.addBalance(transfer.income, transfer.amount);
     newTransfer.amount = transfer.amount;
     newTransfer.reason = transfer.reason;
 
@@ -35,9 +28,9 @@ export class TransferService {
 
   }
 
-  //??
-  getHistoryOut(accountId:string, pagination?:PaginationModel,  dataRange?:DataRangeDto ): TransferEntity[] {//dataRange:DataRangeModel
-    dataRange = {...{min: 0 ,  max: Date.now()}, ...dataRange}  //??
+  
+  getHistoryOut(accountId:string, pagination?:PaginationModel,  dataRange?:DataRangeDto ): TransferEntity[] { //dataRange:DataRangeModel
+    dataRange = {...{min: 0 ,  max: Date.now()}, ...dataRange}  
 
     const transferHistory = this.transferRepository.findOutcomeByDataRange(accountId, dataRange.min, dataRange?.max );
     const transfercuentaHistory = transferHistory.filter((account) => account.id === accountId);
@@ -53,6 +46,7 @@ export class TransferService {
     return history;
   }
   */
+  
 
 
 

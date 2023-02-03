@@ -20,7 +20,7 @@ export class SecurityController {
     }
 
     @Post('/singOut/:JWToken')
-    singOut(@Param() JWToken: string): void {
+    singOut(@Param('JWToken') JWToken: string): void {
         this.securityService.signOut(JWToken);
     }
 }

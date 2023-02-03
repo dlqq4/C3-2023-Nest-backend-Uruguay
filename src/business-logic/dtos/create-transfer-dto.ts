@@ -16,10 +16,5 @@ export class CreateTransferDTO {
     @IsString({message: 'Reason: Id String Requiered'})
     reason: string;
 
-    /*
-    @IsDate({ message: "Not a valid format."})
-    @IsNotEmpty({ message: "This slot must not be empty."})
-    dateTime: Date;
-    */
 
 }

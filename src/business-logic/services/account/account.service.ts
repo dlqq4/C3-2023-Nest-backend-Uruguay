@@ -47,17 +47,17 @@ export class AccountService {
     }
 
     //DEPOSITAR DINERO EN UNA CUENTA SEGUN ID DE LA CUENTA
-    addBalance(accountId: string, amount: number): void {
+    addBalance(accountId: string, amount: number): AccountEntity {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
         
         currentEntity.balance = currentEntity.balance + amount;
 
-        this.accountRepository.update(accountId, currentEntity)
+        return this.accountRepository.update(accountId, currentEntity)
 
     }
 
-    removeBalance(accountId: string, amount: number): void {
+    removeBalance(accountId: string, amount: number): AccountEntity {
 
         const currentEntity = this.accountRepository.findOneById(accountId);
 
@@ -68,9 +68,8 @@ export class AccountService {
         } else {
 
             currentEntity.balance = currentEntity.balance - amount;
-
-            this.accountRepository.update(accountId, currentEntity)
         }
+        return  this.accountRepository.update(accountId, currentEntity)
     }
 
 

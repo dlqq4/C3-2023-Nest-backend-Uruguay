@@ -25,7 +25,7 @@ export class SecurityService {
         user.username,
         user.password,
       );
-      if (answer) return answer.valueOf().toString()  
+      if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest")  
       else throw new UnauthorizedException();
     }
   
@@ -59,21 +59,17 @@ export class SecurityService {
 
         if (account)
         
-      //return customer.fullName 
+      
       return  [account, jwt.sign(userDto, process.env.TOKEN_SECRET || "tokentest")]
-         //return account
+      
 
         else throw new InternalServerErrorException();
       } else throw new InternalServerErrorException();
     }
   
-    /**
-     * Salir del sistema
-     * @param {string} JWToken
-     * @memberof SecurityService
-     */
+   
     signOut(JWToken: string): void {
-      //implementar
+    
     }
   }
 
