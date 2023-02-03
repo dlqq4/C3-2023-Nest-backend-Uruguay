@@ -43,7 +43,7 @@ export class AccountRepository extends BaseRepository<AccountEntity>  implements
   
     delete(id: string, soft?: boolean): void {
 
-      const index = this.database.findIndex(objIndex => objIndex.id === id);
+      const index = this.database.findIndex((Index) => Index.id === id);
 
       if(!index ) throw new NotFoundException;
 

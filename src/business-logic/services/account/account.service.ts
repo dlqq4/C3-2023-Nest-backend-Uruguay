@@ -127,12 +127,14 @@ export class AccountService {
     }
    
 
-  
+    //PROBANDO
     deleteAccount(accountId: string, soft?: boolean): void {
-        if (soft) this.accountRepository.delete(accountId, soft);
-
-        this.accountRepository.delete(accountId);
+        //if (soft) this.accountRepository.delete(accountId, soft); 
+        
+        this.accountRepository.delete(accountId, soft);
     }
+
+
 
     private getAccount(accountId: string): AccountEntity {
 

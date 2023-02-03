@@ -47,14 +47,15 @@ export class AccountController {
     }
 
 
-    @Delete('/soft-delete/:accountId')
-    softDeleteAccount(@Param() accountId: string): void {
+    @Delete('/softdelete/:id')
+    softDeleteAccount(@Param('id') accountId: string): void {
         this.accountService.deleteAccount(accountId, true);
     }
 
-    @Delete('/hard-delete/:accountId')
-    hardDeleteAccount(@Param() accountId: string): void {
-        this.accountService.deleteAccount(accountId);
+    //ELIMINANDO UNA CUENTA FISICAMENTE
+    @Put('/harddelete/:id')
+    hardDeleteAccount(@Param('id') accountId: string): void {
+        this.accountService.deleteAccount(accountId, false);
     }
 
     @Patch('/change-account-type/:accountId')
