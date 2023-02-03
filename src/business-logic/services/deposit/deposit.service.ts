@@ -5,6 +5,7 @@ import { DepositEntity } from 'src/data-access/entities/deposit-entity';
 import { DepositRepository } from 'src/data-access/repositories/DepositRepo';
 import { AccountService } from '../account';
 import { IDataRangeModel } from 'src/data-access/models/i-data-range-model';
+import { CreateAccountDto } from 'src/business-logic/dtos/create-account-dto';
 
 @Injectable()
 export class DepositService {
@@ -12,21 +13,19 @@ export class DepositService {
     constructor(private readonly depositRepository: DepositRepository,
       private readonly accountService: AccountService) {}
     
-    /**
-   * Crear un deposito
-   *
-   * @param {DepositModel} deposit
-   * @return {*}  {DepositEntity}
-   * @memberof DepositService
-   */
+   
+  //IMPLEMENTANDO
   createDeposit(deposit: CreateDepositDTO): DepositEntity {
-    const newDeposit = new DepositEntity();
+    
+    const account = this.accountService.findOneById(deposit.account);
 
-    const account = this.accountService.findOneById(deposit.accountId);
+    const newDeposit = new DepositEntity();
     
     newDeposit.account = account;
     newDeposit.amount = deposit.amount;
     newDeposit.dateTime = Date.now();
+
+    account.balance = account.balance + newDeposit.amount;
 
     return this.depositRepository.register(newDeposit);
   }
@@ -36,12 +35,7 @@ export class DepositService {
   }
 
 
-  /**
-   * Borrar un deposito
-   *
-   * @param {string} depositId
-   * @memberof DepositService
-   */
+  
   deleteDeposit(depositId: string, soft?: boolean): void {
     if(soft) this.depositRepository.delete(depositId, soft);
     

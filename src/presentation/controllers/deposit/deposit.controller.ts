@@ -9,6 +9,7 @@ export class DepositController {
 
     constructor(private readonly depositService: DepositService) {}
 
+    //GENERO UN DEPOSITO DE DINERO A UNA CUENTA
     @Post('/create')
     createDeposit(@Body() deposit: CreateDepositDTO): DepositEntity {
         return this.depositService.createDeposit(deposit);
