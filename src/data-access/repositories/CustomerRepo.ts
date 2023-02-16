@@ -75,16 +75,11 @@ export class CustomerRepo extends BaseRepository<CustomerEntity> implements Cust
 
 
   //**METODOS PROPIOS DE LA ENTIDAD -->
-  findOneByEmailAndPassword(email: string, password: string): boolean {
+  findOneByEmailAndPassword(email: string, password: string): CustomerEntity {
 
     const index = this.database.findIndex((obj) => obj.email === email && obj.password === password && typeof obj.daletedAt === 'undefined');
-
-    let result: boolean = false
-
-    if (index > -1) {
-      result = true
-    }
-    return result
+    
+    return this.database[index]
   }
 
 

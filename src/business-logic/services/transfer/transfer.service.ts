@@ -15,7 +15,7 @@ export class TransferService {
               private readonly accountService : AccountService) { }
 
 
-    //CREA UNA TRANSFERENCIA ENTRE CUENTAS DEL BANCO
+  //CREA UNA TRANSFERENCIA ENTRE CUENTAS DEL BANCO
   createTransfer(transfer : CreateTransferDTO) : TransferEntity {
     
     const newTransfer = new TransferEntity();
@@ -28,7 +28,12 @@ export class TransferService {
 
   }
 
-  
+  //Traigo todas las transferencias
+  findAllTransfer() : TransferEntity[] {
+    return this.transferRepository.findAll()
+  }
+
+
   getHistoryOut(accountId:string, pagination?:PaginationModel,  dataRange?:DataRangeDto ): TransferEntity[] { //dataRange:DataRangeModel
     dataRange = {...{min: 0 ,  max: Date.now()}, ...dataRange}  
 
@@ -36,18 +41,6 @@ export class TransferService {
     const transfercuentaHistory = transferHistory.filter((account) => account.id === accountId);
     return transfercuentaHistory;
   }
-
-  /*
-  getHistory(accountId:String,  pagination:PaginationModel, dataRange?:IDataRangeModel) : TransferEntity{
-
-    let inHistory = this.getHistoryIn()
-    let outHistory =
-
-    return history;
-  }
-  */
-  
-
 
 
 }

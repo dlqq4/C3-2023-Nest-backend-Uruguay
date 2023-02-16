@@ -15,6 +15,9 @@ export class TransferController {
         return this.transferService.createTransfer(transfer);
     }
 
-    
+    @Get('/getall')
+    findAllTransfers(): TransferEntity[] {
+        return this.transferService.findAllTransfer();
+    }
 
 }

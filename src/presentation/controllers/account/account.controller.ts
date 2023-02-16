@@ -21,12 +21,19 @@ export class AccountController {
         return this.accountService.createAccount(account);
     }
     
-
+    /*
     //MUESTRO LAS CUENTAS DE UN USUARIO
     @Get('/get-account-by-customer-id')
     getAccountByCostumerId(@Query('customer') customer: string): AccountEntity[] {
         return this.accountService.getAccountByCustomerId(customer);
     }
+    */
+
+    @Get('/get-account-by-customer-id/:customer')
+    getAccountByCostumerId(@Param('customer') customer: string): AccountEntity[] {
+        return this.accountService.getAccountByCustomerId(customer);
+    }
+
 
     //MUESTRO EL BALANCE DE UNA CUENTA SEGUN ID DE LA CUENTA
     @Get('/get-balance')
@@ -46,16 +53,15 @@ export class AccountController {
         return this.accountService.removeBalance(accountId, amount);
     }
 
+     //ELIMINANDO UNA CUENTA FISICAMENTE
+     @Put('/harddelete/:id')
+     hardDeleteAccount(@Param('id') accountId: string): void {
+         this.accountService.deleteAccount(accountId, false);
+     }
 
     @Delete('/softdelete/:id')
     softDeleteAccount(@Param('id') accountId: string): void {
         this.accountService.deleteAccount(accountId, true);
-    }
-
-    //ELIMINANDO UNA CUENTA FISICAMENTE
-    @Put('/harddelete/:id')
-    hardDeleteAccount(@Param('id') accountId: string): void {
-        this.accountService.deleteAccount(accountId, false);
     }
 
     @Patch('/change-account-type/:accountId')

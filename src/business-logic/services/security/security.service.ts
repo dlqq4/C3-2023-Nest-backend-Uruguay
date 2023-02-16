@@ -25,12 +25,13 @@ export class SecurityService {
         user.username,
         user.password,
       );
-      if (answer) return jwt.sign(user, process.env.TOKEN_SECRET || "tokentest")  
+
+      if (answer) return jwt.sign({customer : answer}, process.env.TOKEN_SECRET || "tokentest")  
       else throw new UnauthorizedException();
     }
-  
+
     
-    signUp(userDto: SignUpDto): Array<Object> {
+    signUp(userDto: SignUpDto): string { //
       const newCustomer = new CustomerEntity();
       const documentType = new DocumentTypeEntity();
 
@@ -59,8 +60,10 @@ export class SecurityService {
 
         if (account)
         
+        
       
-      return  [account, jwt.sign(userDto, process.env.TOKEN_SECRET || "tokentest")]
+      return  jwt.sign({customer: customer}, process.env.TOKEN_SECRET || "tokentest");
+      //[account, jwt.sign(userDto, process.env.TOKEN_SECRET || "tokentest")]
       
 
         else throw new InternalServerErrorException();

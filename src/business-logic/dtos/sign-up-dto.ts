@@ -27,11 +27,6 @@ export class SignUpDto{
     @Min(5, {message: 'Password must be at least 5 characters long!'})
     password: string;
 
-    @IsOptional()
-    @IsNumber()
-    @IsPositive()
-    balance?: number;
-
     @IsString()
     @IsNotEmpty({message:'This value cannot be empty!'})
     accountTypeName: string;

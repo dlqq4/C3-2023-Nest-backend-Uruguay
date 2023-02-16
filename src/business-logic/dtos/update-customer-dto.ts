@@ -22,7 +22,6 @@ export class UpdateCustomerDTO {
     @IsNumberString()
     phone: string;
 
-    
     @IsBoolean()
     state: boolean;
     

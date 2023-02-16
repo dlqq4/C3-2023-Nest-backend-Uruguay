@@ -15,7 +15,7 @@ export class SecurityController {
     }
 
     @Post('/singUp')
-    singUp(@Body() user: SignUpDto) {
+    singUp(@Body() user: SignUpDto) :string{
         return this.securityService.signUp(user);
     }
 
